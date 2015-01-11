@@ -1,0 +1,16 @@
+<?php
+
+function r_install() {
+  drupal_set_message(t('R <a href="!url">configuration</a>.', array('!url' => url('admin/config/content/r'))));
+  variable_set('r_path', '/usr/bin/R');
+  variable_set('r_tmp', '/tmp');
+  variable_set('r_cache', '/tmp');
+  variable_set('r_mode', 0);
+}
+
+function r_uninstall() {
+  variable_del('r_path');
+  variable_del('r_tmp');
+  variable_del('r_cache');
+  variable_del('r_mode');
+} 

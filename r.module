@@ -1,0 +1,69 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function r_menu() {
+  $items['admin/config/content/r'] = array(
+    'title' => 'R',
+    'description' => 'Necessary directories and paths.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('r_admin_settings'),
+    'access arguments' => array('administer site configuration'),
+    'file' => 'r.admin.inc',
+  );
+
+  return $items;
+}
+
+function r_filter_info() {
+  $filters['filter_r'] = array(
+    'title' => t('R Filter'),
+    'description' => t('Run R commands. Example of use: [R]rnorm(30,0,1);[/R]'),
+		'process callback' => '_filter_r_process',
+    'tips callback'  => '_filter_r_tips',
+    'cache' => TRUE,
+  );
+  return $filters;
+}
+
+
+function _r_filter_callback($matches) {
+    $hash = sha1($matches[1]);
+    
+    if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {
+      return '<pre>' . file_get_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out') . '</pre>';
+    } 
+    else {
+      $fh = fopen(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.in', 'w');
+      fwrite($fh, $matches[1]);
+      fclose($fh);
+
+      $output = _r_exec($hash);
+      file_put_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out', $output);
+      return '<pre>' . $output . '</pre>';
+    }
+}
+
+function _r_exec($hash) {
+  $r_mode = variable_get('r_mode', 0) ? '--slave' : '--quiet';
+	shell_exec('cd '. variable_get('r_tmp', '/tmp') . ';' . variable_get('r_path', '/usr/bin/R'). ' CMD BATCH ' . $r_mode . ' --no-timing ' . variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.in ' . variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
+	$output = file_get_contents(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
+	unlink(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
+	return $output;
+	
+}
+
+function _filter_r_tips($filter, $format, $long = FALSE) {
+  return t('Embed expression as [R]rnorm(5, 0, 1);[/R] to be evaluated by R within content.');
+}
+
+function _filter_r_process($text, $filter, $format) {
+  return preg_replace_callback('/\[R\](.*?)\[\/R\]/s', '_r_filter_callback', $text);
+}
+
+function r_flush_caches() {
+  // clear cache so that output files will be rebuilt 
+	shell_exec('rm ' . variable_get('r_tmp', '/tmp') . '/R.*.in > /dev/null 2>&1');
+	shell_exec('rm ' . variable_get('r_cache', '/tmp'). '/R.*.out > /dev/null 2>&1');
+}
