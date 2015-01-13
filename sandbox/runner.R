@@ -1,5 +1,4 @@
 args <- commandArgs(trailingOnly = TRUE)
-print(args)
 source(paste(args[[2]], "blacklist.R", sep=""))
 source(paste(args[[2]], "init.R", sep=""))
 source(paste(args[[2]], "masked.functions.R", sep=""))
