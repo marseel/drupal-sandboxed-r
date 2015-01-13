@@ -64,12 +64,12 @@ function _filter_callback($matches, $sandbox) {
 function _r_exec($hash) {
   $r_mode = variable_get('r_mode', 0) ? '--slave' : '--quiet';
   $exec = 'cd '. variable_get('r_tmp', '/tmp') . ';'
-    . variable_get('r_path', '/usr/bin/R')
+      . variable_get('r_path', '/usr/bin/R')
       . ' CMD BATCH ' . $r_mode
       . ' --no-timing ' . variable_get('r_tmp', '/tmp')
       . '/R.' . $hash . '.in '
       . variable_get('r_tmp', '/tmp')
-      . '/R.' . $hash . '.out');
+      . '/R.' . $hash . '.out';
     shell_exec($exec);
     $output = file_get_contents(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
     unlink(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
