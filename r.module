@@ -19,7 +19,7 @@ function r_filter_info() {
     'description' => t('Run R commands. Example of use: [R]rnorm(30,0,1);[/R]'),
         'process callback' => '_filter_r_process',
     'tips callback'  => '_filter_r_tips',
-    'cache' => TRUE,
+    'cache' => FALSE,
   );
 
   $filters['filter_sandboxed_r'] = array(
@@ -27,44 +27,39 @@ function r_filter_info() {
     'description' => t('Run R commands in sandboxed environment. Example of use: [R]rnorm(30,0,1);[/R]'),
         'process callback' => '_filter_sandboxed_r_process',
     'tips callback'  => '_filter_r_tips',
-    'cache' => TRUE,
+    'cache' => FALSE,
   );
   return $filters;
 }
 
 function _filter_callback($matches, $sandbox) {
     $hash = sha1($matches[1]);
-    echo $hash, PHP_EOL;
 
     if ($sandbox == 1) {
         $hash += "SANDBOX";
     }
 
-    echo $hash, PHP_EOL;
 
     if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {
-      echo "EXISTS", PHP_EOL;
       return '<pre>' . file_get_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out') . '</pre>';
     }
     else {
-      echo "DOES NOT EXIST", PHP_EOL;
       $fh = fopen(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.in', 'w');
       fwrite($fh, $matches[1]);
       fclose($fh);
 
       $output = _r_exec($hash, $sandbox);
-      echo $output, PHP_EOL;
       file_put_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out', $output);
       return '<pre>' . $output . '</pre>';
     }
 }
 
 function _r_filter_callback($matches) {
-    _filter_callback($matches, 0);
+    return _filter_callback($matches, 0);
 }
 
 function _sandboxed_r_filter_callback($matches) {
-    _filter_callback($matches, 1);
+    return _filter_callback($matches, 1);
 }
 
 
