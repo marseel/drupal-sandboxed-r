@@ -34,26 +34,26 @@ function r_filter_info() {
 
 function _filter_callback($matches, $sandbox) {
     $hash = sha1($matches[1]);
-    echo $hash;
+    echo $hash, PHP_EOL;
 
     if ($sandbox == 1) {
         $hash += "SANDBOX";
     }
 
-    echo $hash;
+    echo $hash, PHP_EOL;
 
     if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {
-      echo "EXISTS";
+      echo "EXISTS", PHP_EOL;
       return '<pre>' . file_get_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out') . '</pre>';
     }
     else {
-      echo "DOES NOT EXIST";
+      echo "DOES NOT EXIST", PHP_EOL;
       $fh = fopen(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.in', 'w');
       fwrite($fh, $matches[1]);
       fclose($fh);
 
       $output = _r_exec($hash, $sandbox);
-      echo $output;
+      echo $output, PHP_EOL;
       file_put_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out', $output);
       return '<pre>' . $output . '</pre>';
     }
