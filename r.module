@@ -73,11 +73,13 @@ function _r_exec($hash, $sandbox) {
     echo 'SANDBOX', PHP_EOL;
     echo $sandbox;
     if ($sandbox == 1) {
+        echo 'TUT', PHP_EOL;
         $exec = $exec
             . dirname(__FILE__) . '/sandbox/runner.R '
             . variable_get('r_tmp', '/tmp')
             . '/R.' . $hash . '.out'
             . ' --args ' . $hash;
+        echo $exec, PHP_EOL;
     } else {
         $exec = $exec
             . variable_get('r_tmp', '/tmp')
