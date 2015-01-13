@@ -67,7 +67,7 @@ function _r_exec($hash, $sandbox) {
     $exec = 'cd '. variable_get('r_tmp', '/tmp') . ';'
         . variable_get('r_path', '/usr/bin/R')
         . ' CMD BATCH ' . $r_mode
-        . ' --no-timing ' . variable_get('r_tmp', '/tmp');
+        . ' --no-timing ';
     if ($sandbox == 1) {
         $exec = $exec
             . dirname(__FILE__) . '/sandbox/runner.R '
@@ -78,6 +78,7 @@ function _r_exec($hash, $sandbox) {
         echo $exec;
     } else {
         $exec = $exec
+            . variable_get('r_tmp', '/tmp')
             . '/R.' . $hash . '.in '
             . variable_get('r_tmp', '/tmp')
             . '/R.' . $hash . '.out';
