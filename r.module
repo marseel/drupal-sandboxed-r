@@ -72,7 +72,7 @@ function _r_exec($hash, $sandbox) {
         $exec = $exec
             . dirname(__FILE__) . '/sandbox/runner.R '
             . variable_get('r_tmp', '/tmp')
-            . '/R.' . $hash . '.out';
+            . '/R.' . $hash . '.out'
             . ' --args ' . $hash;
         echo dirname(__FILE__), PHP_EOL;
         echo $exec
