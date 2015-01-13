@@ -36,13 +36,18 @@ function _filter_callback($matches, $sandbox) {
     $hash = sha1($matches[1]);
     echo $hash;
 
-    if ($sandbox == 1)
+    if ($sandbox == 1) {
         $hash += "SANDBOX";
+    }
+
+    echo $hash;
 
     if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {
+      echo "EXISTS";
       return '<pre>' . file_get_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out') . '</pre>';
     }
     else {
+      echo "DOES NOT EXIST";
       $fh = fopen(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.in', 'w');
       fwrite($fh, $matches[1]);
       fclose($fh);
