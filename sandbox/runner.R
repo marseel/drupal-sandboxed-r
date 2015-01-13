@@ -1,2 +1,7 @@
 args <- commandArgs(trailingOnly = TRUE)
-print(args)
+source("./blacklist.R")
+source("./init.R")
+source("./masked.functions.R")
+source("./sandbox.R")
+src <- readChar(args[[1]], file.info(args[[1]]$size))
+sandbox(src)
