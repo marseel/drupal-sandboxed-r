@@ -36,10 +36,8 @@ function _filter_callback($matches, $sandbox) {
     $hash = sha1($matches[1]);
 
     if ($sandbox == 1) {
-        echo "SANDBOX YOLO", PHP_EOL;
-        $hash += "SANDBOX";
+        $hash = $hash . 'SANDBOX';
     }
-    echo $hash, PHP_EOL;
 
 
     if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {
