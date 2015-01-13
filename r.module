@@ -74,8 +74,6 @@ function _r_exec($hash, $sandbox) {
             . variable_get('r_tmp', '/tmp')
             . '/R.' . $hash . '.out'
             . ' --args ' . $hash;
-        echo dirname(__FILE__), PHP_EOL;
-        echo $exec;
     } else {
         $exec = $exec
             . variable_get('r_tmp', '/tmp')
