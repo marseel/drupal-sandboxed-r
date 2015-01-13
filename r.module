@@ -78,7 +78,7 @@ function _r_exec($hash, $sandbox) {
     } else {
         $exec = $exec
             . variable_get('r_tmp', '/tmp')
-            . '/R.' . $hash . '.in '
+            . '/R.' . $hash . '.in ';
     }
 
     $exec = $exec
