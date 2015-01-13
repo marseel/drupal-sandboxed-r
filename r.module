@@ -21,10 +21,7 @@ function r_filter_info() {
     'tips callback'  => '_filter_r_tips',
     'cache' => TRUE,
   );
-  return $filters;
-}
 
-function sandboxed_filter_info() {
   $filters['filter_sandboxed_r'] = array(
     'title' => t('Sandboxed R Filter'),
     'description' => t('Run R commands in sandboxed environment. Example of use: [R]rnorm(30,0,1);[/R]'),
@@ -34,7 +31,6 @@ function sandboxed_filter_info() {
   );
   return $filters;
 }
-
 
 function _r_filter_callback($matches) {
     _filter_callback($matches, 0);
