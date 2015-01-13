@@ -68,7 +68,7 @@ function _r_exec($hash) {
       . ' CMD BATCH ' . $r_mode
       . ' --no-timing ' . variable_get('r_tmp', '/tmp')
       . '/R.' . $hash . '.in '
-      . variable_get('r_tmp', '/tmp');
+      . variable_get('r_tmp', '/tmp')
       . '/R.' . $hash . '.out');
     shell_exec($exec);
     $output = file_get_contents(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
