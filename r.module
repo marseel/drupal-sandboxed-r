@@ -63,7 +63,7 @@ function _sandboxed_r_filter_callback($matches) {
 }
 
 function _r_exec($hash, $sandbox) {
-    $r_mode = variable_get('r_mode', 0) ? '--slave ' : '--quiet ';
+    $r_mode = variable_get('r_mode', 0) ? ' --slave ' : ' --quiet ';
     $exec = 'cd '. variable_get('r_tmp', '/tmp') . ';'
         . variable_get('r_path', '/usr/bin/R')
         . $r_mode
