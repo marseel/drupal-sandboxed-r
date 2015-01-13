@@ -32,16 +32,12 @@ function r_filter_info() {
   return $filters;
 }
 
-function _r_filter_callback($matches) {
-    _filter_callback($matches, 0);
-}
-
-function _sandboxed_r_filter_callback($matches) {
-    _filter_callback($matches, 0);
-}
-
 function _filter_callback($matches, $sandbox) {
     $hash = sha1($matches[1]);
+    echo $hash;
+
+    if ($sandbox == 1)
+        $hash += "SANDBOX";
 
     if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {
       return '<pre>' . file_get_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out') . '</pre>';
@@ -51,11 +47,21 @@ function _filter_callback($matches, $sandbox) {
       fwrite($fh, $matches[1]);
       fclose($fh);
 
-      $output = _r_exec($hash);
+      $output = _r_exec($hash, $sandbox);
+      echo $output;
       file_put_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out', $output);
       return '<pre>' . $output . '</pre>';
     }
 }
+
+function _r_filter_callback($matches) {
+    _filter_callback($matches, 0);
+}
+
+function _sandboxed_r_filter_callback($matches) {
+    _filter_callback($matches, 1);
+}
+
 
 function _r_exec($hash) {
   $r_mode = variable_get('r_mode', 0) ? '--slave' : '--quiet';
