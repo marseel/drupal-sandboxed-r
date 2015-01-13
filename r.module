@@ -39,7 +39,6 @@ function _filter_callback($matches, $sandbox) {
         $hash = $hash . 'SANDBOX';
     }
 
-
     if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {
       return '<pre>' . file_get_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out') . '</pre>';
     }
@@ -62,8 +61,8 @@ function _sandboxed_r_filter_callback($matches) {
     return _filter_callback($matches, 1);
 }
 
-
-function _r_exec($hash) {
+function _r_exec($hash, $sandbox) {
+  echo dirname(__FILE__), PHP_EOL;
   $r_mode = variable_get('r_mode', 0) ? '--slave' : '--quiet';
   $exec = 'cd '. variable_get('r_tmp', '/tmp') . ';'
       . variable_get('r_path', '/usr/bin/R')
@@ -72,10 +71,10 @@ function _r_exec($hash) {
       . '/R.' . $hash . '.in '
       . variable_get('r_tmp', '/tmp')
       . '/R.' . $hash . '.out';
-    shell_exec($exec);
-    $output = file_get_contents(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
-    unlink(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
-    return $output;
+  shell_exec($exec);
+  $output = file_get_contents(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
+  unlink(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
+  return $output;
 }
 
 function _filter_r_tips($filter, $format, $long = FALSE) {
