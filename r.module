@@ -1,8 +1,5 @@
 <?php
 
-/**
- * Implements hook_menu().
- */
 function r_menu() {
   $items['admin/config/content/r'] = array(
     'title' => 'R',
@@ -27,8 +24,27 @@ function r_filter_info() {
   return $filters;
 }
 
+function sandboxed_filter_info() {
+  $filters['filter_sandboxed_r'] = array(
+    'title' => t('Sandboxed R Filter'),
+    'description' => t('Run R commands in sandboxed environment. Example of use: [R]rnorm(30,0,1);[/R]'),
+        'process callback' => '_filter_sandboxed_r_process',
+    'tips callback'  => '_filter_r_tips',
+    'cache' => TRUE,
+  );
+  return $filters;
+}
+
 
 function _r_filter_callback($matches) {
+    _filter_callback($matches, 0);
+}
+
+function _sandboxed_r_filter_callback($matches) {
+    _filter_callback($matches, 0);
+}
+
+function _filter_callback($matches, $sandbox) {
     $hash = sha1($matches[1]);
 
     if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {
@@ -47,13 +63,14 @@ function _r_filter_callback($matches) {
 
 function _r_exec($hash) {
   $r_mode = variable_get('r_mode', 0) ? '--slave' : '--quiet';
-  shell_exec('cd '. variable_get('r_tmp', '/tmp') . ';'
-      . variable_get('r_path', '/usr/bin/R')
+  $exec = 'cd '. variable_get('r_tmp', '/tmp') . ';'
+    . variable_get('r_path', '/usr/bin/R')
       . ' CMD BATCH ' . $r_mode
       . ' --no-timing ' . variable_get('r_tmp', '/tmp')
       . '/R.' . $hash . '.in '
-      . variable_get('r_tmp', '/tmp')
+      . variable_get('r_tmp', '/tmp');
       . '/R.' . $hash . '.out');
+    shell_exec($exec);
     $output = file_get_contents(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
     unlink(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
     return $output;
@@ -65,6 +82,10 @@ function _filter_r_tips($filter, $format, $long = FALSE) {
 
 function _filter_r_process($text, $filter, $format) {
   return preg_replace_callback('/\[R\](.*?)\[\/R\]/s', '_r_filter_callback', $text);
+}
+
+function _filter_sandboxed_r_process($text, $filter, $format) {
+  return preg_replace_callback('/\[R\](.*?)\[\/R\]/s', '_sandboxed_r_filter_callback', $text);
 }
 
 function r_flush_caches() {
