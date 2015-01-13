@@ -75,7 +75,7 @@ function _r_exec($hash, $sandbox) {
         $exec = $exec
             . dirname(__FILE__) . '/sandbox/runner.R '
             . '--args ' . $in_file
-            . ' ';
+            . ' ' . dirname(__FILE__) . '/sandbox/';
     } else {
         $exec = $exec . $in_file;
     }
