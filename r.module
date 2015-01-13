@@ -40,8 +40,6 @@ function _filter_callback($matches, $sandbox) {
         $hash = $hash . 'SANDBOX';
     }
 
-    echo $hash, PHP_EOL;
-
     if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {
         return '<pre>' . file_get_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out') . '</pre>';
     }
@@ -65,28 +63,30 @@ function _sandboxed_r_filter_callback($matches) {
 }
 
 function _r_exec($hash, $sandbox) {
-    $r_mode = variable_get('r_mode', 0) ? '--slave' : '--quiet';
+    $r_mode = variable_get('r_mode', 0) ? '--slave ' : '--quiet ';
     $exec = 'cd '. variable_get('r_tmp', '/tmp') . ';'
         . variable_get('r_path', '/usr/bin/R')
-        . ' CMD BATCH ' . $r_mode
-        . ' --no-timing ';
-    echo 'SANDBOX', PHP_EOL;
-    echo $sandbox;
+        . $r_mode
+        . '--no-restore '
+        . '--file=';
     if ($sandbox == 1) {
-        echo 'TUT', PHP_EOL;
         $exec = $exec
             . dirname(__FILE__) . '/sandbox/runner.R '
             . variable_get('r_tmp', '/tmp')
-            . '/R.' . $hash . '.out'
-            . ' --args ' . $hash;
-        echo $exec, PHP_EOL;
+            . '--args ' . $hash
+            . ' ';
     } else {
         $exec = $exec
             . variable_get('r_tmp', '/tmp')
             . '/R.' . $hash . '.in '
-            . variable_get('r_tmp', '/tmp')
-            . '/R.' . $hash . '.out';
     }
+
+    $exec = $exec
+        . ' > '
+        . variable_get('r_tmp', '/tmp')
+        . '/R.' . $hash . '.out ';
+    echo $exec;
+
     shell_exec($exec);
     $output = file_get_contents(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
     unlink(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
