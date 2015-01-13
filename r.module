@@ -69,15 +69,15 @@ function _r_exec($hash, $sandbox) {
         . $r_mode
         . '--no-restore '
         . '--file=';
+    $in_file = variable_get('r_tmp', '/tmp')
+            . '/R.' . $hash . '.in ';
     if ($sandbox == 1) {
         $exec = $exec
             . dirname(__FILE__) . '/sandbox/runner.R '
-            . '--args ' . $hash
+            . '--args ' . $in_file
             . ' ';
     } else {
-        $exec = $exec
-            . variable_get('r_tmp', '/tmp')
-            . '/R.' . $hash . '.in ';
+        $exec = $exec . $in_file;
     }
 
     $exec = $exec
