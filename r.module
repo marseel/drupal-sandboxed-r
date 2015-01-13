@@ -72,7 +72,6 @@ function _r_exec($hash, $sandbox) {
     if ($sandbox == 1) {
         $exec = $exec
             . dirname(__FILE__) . '/sandbox/runner.R '
-            . variable_get('r_tmp', '/tmp')
             . '--args ' . $hash
             . ' ';
     } else {
