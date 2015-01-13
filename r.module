@@ -40,6 +40,8 @@ function _filter_callback($matches, $sandbox) {
         $hash = $hash . 'SANDBOX';
     }
 
+    echo $hash, PHP_EOL;
+
     if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {
         return '<pre>' . file_get_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out') . '</pre>';
     }
