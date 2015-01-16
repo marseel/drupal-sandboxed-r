@@ -65,7 +65,7 @@ function _sandboxed_r_filter_callback($matches) {
 function _r_exec($hash, $sandbox) {
     $exec = 'cd '. variable_get('r_tmp', '/tmp') . ';'
         . variable_get('r_path', '/usr/bin/R')
-        . '--slave '
+        . ' --slave '
         . '--no-restore '
         . '--file=';
     $in_file = variable_get('r_tmp', '/tmp')
@@ -83,7 +83,6 @@ function _r_exec($hash, $sandbox) {
         . ' > '
         . variable_get('r_tmp', '/tmp')
         . '/R.' . $hash . '.out ';
-    echo $exec;
 
     shell_exec($exec);
     $output = file_get_contents(variable_get('r_tmp', '/tmp') . '/R.' . $hash . '.out');
