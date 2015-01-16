@@ -41,7 +41,7 @@ function _filter_callback($matches, $sandbox) {
     }
 
     if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {
-        $code_out = '<rsplus>' . $matches[1] . '</rsplus>';
+        $code_out = '<rsplus>' . PHP_EOL . $matches[1] . '</rsplus>' . PHP_EOL;
         $output = '<pre>' . file_get_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out') . '</pre>';
         return $code_out . $output;
     }
@@ -51,7 +51,7 @@ function _filter_callback($matches, $sandbox) {
         fclose($fh);
 
         $output = _r_exec($hash, $sandbox);
-        $code_out = '<rsplus>' . $matches[1] . '</rsplus>';
+        $code_out = '<rsplus>' . PHP_EOL . $matches[1] . '</rsplus>' . PHP_EOL;
         file_put_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out', $output);
         return $code_out . '<pre>' . $output . '</pre>';
     }
