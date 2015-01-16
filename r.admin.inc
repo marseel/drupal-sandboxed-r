@@ -56,13 +56,6 @@ function r_admin_settings($form, &$form_state) {
     '#description' => t('Absolute path to cache directory.'),
   );
 
-  $form['settings_general']['r_mode'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Minimal R mode'),
-    '#default_value' => variable_get('r_mode', 0),
-    '#description' => t('Run R in most silent (--slave) mode with minimal output.  Flush caches after changing to reset any cached output.'),
-  );
-
   $form['#validate'][] = 'r_admin_settings_validate';
 
   return system_settings_form($form);
