@@ -5,12 +5,10 @@ function r_install() {
   variable_set('r_path', '/usr/bin/R');
   variable_set('r_tmp', '/tmp');
   variable_set('r_cache', '/tmp');
-  variable_set('r_mode', 0);
 }
 
 function r_uninstall() {
   variable_del('r_path');
   variable_del('r_tmp');
   variable_del('r_cache');
-  variable_del('r_mode');
-} 
+}
