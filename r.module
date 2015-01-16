@@ -1,5 +1,10 @@
 <?php
 
+drupal_add_css(
+    drupal_get_path('module', 'r') . '/static/default.css',
+    array('group' => CSS_DEFAULT, 'every_page' => TRUE)
+);
+
 function r_menu() {
     $items['admin/config/content/r'] = array(
         'title' => 'R',
