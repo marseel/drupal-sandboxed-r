@@ -40,7 +40,7 @@ function _filter_callback($matches, $sandbox) {
         $hash = $hash . 'SANDBOX';
     }
 
-    $code_out = '<pre><code class="r">' . $matches[1] . '</code></pre>';
+    $code_out = '<pre>' . $matches[1] . '</pre>';
 
     if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {
         $output = '<pre>' . file_get_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out') . '</pre>';
