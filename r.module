@@ -73,11 +73,11 @@ function _filter_callback($matches, $sandbox) {
 }
 
 function _r_filter_callback($matches) {
-    return _filter_callback($matches, 0);
+    return _filter_callback($matches, '0');
 }
 
 function _sandboxed_r_filter_callback($matches) {
-    return _filter_callback($matches, 1);
+    return _filter_callback($matches, '1');
 }
 
 function _r_exec($hash, $sandbox) {
@@ -88,14 +88,12 @@ function _r_exec($hash, $sandbox) {
         . '--file=';
     $in_file = variable_get('r_tmp', '/tmp')
             . '/R.' . $hash . '.in ';
-    if ($sandbox == 1) {
-        $exec = $exec
-            . dirname(__FILE__) . '/sandbox/runner.R '
-            . '--args ' . $in_file
-            . ' ' . dirname(__FILE__) . '/sandbox/';
-    } else {
-        $exec = $exec . $in_file;
-    }
+
+    $exec = $exec
+        . dirname(__FILE__) . '/sandbox/runner.R '
+        . '--args ' . $in_file
+        . ' ' . dirname(__FILE__) . '/sandbox/ '
+        . $sandbox;
 
     $exec = $exec
         . ' > '
