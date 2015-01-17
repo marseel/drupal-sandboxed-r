@@ -13,7 +13,7 @@ src <- readChar(args[[1]], file.info(args[[1]])$size)
 res <- tryCatch(sandbox(src), error = function(e) e)
 
 img.exists <- !is.na(file.info(img)$size)
-dev.off()
+off <- dev.off()
 
 if (any(class(res) == 'error')) {
     print('FAIL');
