@@ -41,7 +41,6 @@ function _filter_callback($matches, $sandbox) {
     }
 
     $code_out = '<pre>' . $matches[1] . '</pre>';
-    $img = variable_get('r_cache', '/tmp') . '/R.' . $hash . '.png';
 
     if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {
         $output = '<pre>' . file_get_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out') . '</pre>';
@@ -58,13 +57,16 @@ function _filter_callback($matches, $sandbox) {
 
         $output = _r_exec($hash, $sandbox);
         file_put_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out', $output);
+
+        $img = variable_get('r_cache', '/tmp') . '/R.' . $hash . '.png';
         if (file_exists($img)) {
             file_save_data(file_get_contents($img), 'public://' . $hash . '.png');
             $url = file_create_url('public://' . $hash . '.png');
-            echo $url;
+            return $code_out . '<pre>' . $output . '</pre>' . '<img src=' .
+                $url . '>'
+        } else {
+            return $code_out . '<pre>' . $output . '</pre>';
         }
-
-        return $code_out . '<pre>' . $output . '</pre>';
     }
 }
 
