@@ -6,7 +6,7 @@ source(paste(args[[2]], "sandbox.R", sep=""))
 
 size <- nchar(args[[1]])
 prefix <- substr(args[[1]], 1, size - 2)
-img <- paste(prefix, ".png", sep="")
+img <- paste(prefix, "png", sep="")
 png(img)
 
 src <- readChar(args[[1]], file.info(args[[1]])$size)
