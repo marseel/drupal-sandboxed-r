@@ -20,8 +20,13 @@ if (args[[3]] == "1") {
     }
 } else {
     setTimeLimit(elapsed = 10)
-    source(args[[1]]);
+    res <- tryCatch(source(args[[1]]), error = function(e) e)
     setTimeLimit(elapsed = Inf)
+
+    if (any(class(res) == 'error')) {
+        print('FAIL');
+        print(res[[1]]);
+    }
 }
 
 img.exists <- !is.na(file.info(img)$size)

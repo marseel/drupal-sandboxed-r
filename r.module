@@ -50,7 +50,7 @@ function _filter_callback($matches, $sandbox) {
             return $code_out . '<pre>' . $output . '</pre>' . '<img src=' .
                 $url . '>';
         } else {
-            return $code_out . $output;
+            return $code_out . '<pre>' . $output . '</pre>';
         }
     }
     else {
