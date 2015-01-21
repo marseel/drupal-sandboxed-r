@@ -44,7 +44,7 @@ function _filter_callback($matches, $sandbox) {
     $img = variable_get('r_cache', '/tmp') . '/R.' . $hash . '.png';
 
     if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {
-        $output = '<pre>' . file_get_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out') . '</pre>';
+        $output = file_get_contents(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out');
         if (file_exists($img)) {
             $url = file_create_url('public://' . $hash . '.png');
             return $code_out . '<pre>' . $output . '</pre>' . '<img src=' .

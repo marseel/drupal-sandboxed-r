@@ -19,7 +19,9 @@ if (args[[3]] == "1") {
         print(res[[1]]);
     }
 } else {
+    setTimeLimit(elapsed = 10)
     source(args[[1]]);
+    setTimeLimit(elapsed = Inf)
 }
 
 img.exists <- !is.na(file.info(img)$size)
