@@ -40,7 +40,11 @@ function _filter_callback($matches, $sandbox) {
         $hash = $hash . 'SANDBOX';
     }
 
-    $code_out = '[geshifilter-rsplus]' . $matches[1] . '[/geshifilter-rsplus]';
+    if (variable_get('r_geshi_mode', 0) == 1) {
+        $code_out = '[geshifilter-rsplus]' . $matches[1] . '[/geshifilter-rsplus]';
+    } else {
+        $code_out = '<pre>' . $matches[1] . '</pre>';
+    }
     $img = variable_get('r_cache', '/tmp') . '/R.' . $hash . '.png';
 
     if (file_exists(variable_get('r_cache', '/tmp') . '/R.' . $hash . '.out')) {

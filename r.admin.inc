@@ -56,6 +56,13 @@ function r_admin_settings($form, &$form_state) {
     '#description' => t('Absolute path to cache directory.'),
   );
 
+  $form['settings_general']['r_module'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Geshi code coloring'),
+      '#default_value' => variable_get('r_geshi_mode', 0),
+      '#description' => t('Add tags so R code can be highlight wth Geshi flter'),
+  );
+
   $form['#validate'][] = 'r_admin_settings_validate';
 
   return system_settings_form($form);
